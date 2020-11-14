@@ -11,13 +11,13 @@ namespace ClinicaApi.Models
         public string Nome { get; set; }
         public DateTime Birthday { get; set; }
         public string Sexo { get; set; }
+        public bool isDeleted {get; set;}
 
-        public int ConsultaCodigo { get; set; }
+        public int? ConsultaCodigo { get; set; }
         public Consulta Consulta { get; set; }
 
         public int ContatoCodigo { get; set; }
         public Contato Contato { get; set; }
-
 
 
         [ForeignKey("Usuario")]

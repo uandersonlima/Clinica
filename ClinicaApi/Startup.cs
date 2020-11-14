@@ -1,4 +1,5 @@
 
+using System.Threading.Tasks;
 using ClinicaApi.Data;
 using ClinicaApi.Models;
 using ClinicaApi.Repository;
@@ -35,7 +36,7 @@ namespace ClinicaApi
             });
 
             services.AddControllers();
-            
+            services.AddHttpContextAccessor();
 
             services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<ClinicaContext>().AddDefaultTokenProviders();
             services.AddDbContext<ClinicaContext>(options =>
@@ -62,6 +63,16 @@ namespace ClinicaApi
             services.AddScoped<IUsuarioRepository, UsuarioRepository>();
             #endregion
             services.AddScoped<ClinicaContext>();
+
+            services.ConfigureApplicationCookie(options =>
+            {
+                options.Cookie.HttpOnly = false;
+                options.Events.OnRedirectToLogin = context =>
+                {
+                    context.Response.StatusCode = 401;
+                    return Task.CompletedTask;
+                };
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -72,12 +83,13 @@ namespace ClinicaApi
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseHttpsRedirection();
 
+            app.UseStatusCodePages();
             app.UseRouting();
-
+            app.UseAuthentication();
             app.UseAuthorization();
-
+            app.UseHttpsRedirection();
+            
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();

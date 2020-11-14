@@ -8,6 +8,7 @@ namespace ClinicaApi.Services.Interfaces
     {
         Task<ApplicationUser> GetUserAsync(string email, string senha);
         Task<List<string>> CreateAsync(ApplicationUser user, string senha);
+        Task<ApplicationUser> GetUserAsync();
 
     }
 }

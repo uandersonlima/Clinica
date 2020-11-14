@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ClinicaApi.Controllers
 {
-        [ApiController]
+    [ApiController]
     [Route("api/[controller]")]
     public class ConsultaController:ControllerBase
     {

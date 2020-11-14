@@ -2,6 +2,7 @@ using System.Threading.Tasks;
 using ClinicaApi.Models;
 using ClinicaApi.Models.DTO;
 using ClinicaApi.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -44,7 +45,7 @@ namespace ClinicaApi.Controllers
                     //     Utilizado = false
                     // };
                     // _tokenRepository.Cadastrar(tokenModel);
-                    return Ok("Logou");
+                    return Ok(await userManager.GetUserAsync(HttpContext.User));
                 }
                 else
                 {
@@ -86,6 +87,18 @@ namespace ClinicaApi.Controllers
                 Email = usuarioDTO.Email,
                 UserName = usuarioDTO.Email
             };
+        }
+        
+        [Authorize, HttpGet("")]
+        public async Task<IActionResult> Get()
+        {
+            return Ok(await usuarioServices.GetUserAsync());
+        } 
+
+        [Authorize, HttpPost("logout")]
+        public async Task<IActionResult> Logout()
+        {
+            return Ok(signInManager.SignOutAsync());
         }
     }
 }

@@ -24,5 +24,10 @@ namespace ClinicaApi.Services
         {
             return await usuarioRepository.GetUserAsync(email, senha);
         }
+
+        public async Task<ApplicationUser> GetUserAsync()
+        {
+            return await usuarioRepository.GetUserAsync();
+        }
     }
 }

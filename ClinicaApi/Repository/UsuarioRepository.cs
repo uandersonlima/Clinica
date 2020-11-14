@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using ClinicaApi.Models;
 using ClinicaApi.Respository.Interfaces;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 
 namespace ClinicaApi.Repository
@@ -10,10 +11,12 @@ namespace ClinicaApi.Repository
     public class UsuarioRepository : IUsuarioRepository
     {
         private readonly UserManager<ApplicationUser> userManager;
+        private readonly IHttpContextAccessor context;
 
-        public UsuarioRepository(UserManager<ApplicationUser> userManager)
+        public UsuarioRepository(UserManager<ApplicationUser> userManager, IHttpContextAccessor context)
         {
             this.userManager = userManager;
+            this.context = context;
         }
 
         public async Task<List<string>> CreateAsync(ApplicationUser user, string senha)
@@ -40,7 +43,9 @@ namespace ClinicaApi.Repository
 
             return null;
         }
-
-
+        public async Task<ApplicationUser> GetUserAsync()
+        {
+            return await userManager.GetUserAsync(context.HttpContext.User);
+        }
     }
 }
